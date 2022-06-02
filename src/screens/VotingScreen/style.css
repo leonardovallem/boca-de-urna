@@ -1,0 +1,54 @@
+.home-container {
+    background-color: var(--dark-grey);
+}
+
+.vote-panel-wrapper {
+    transition: all 0.75s ease-in-out;
+}
+
+.vote-panel, .side-panel {
+    margin: 2em;
+    padding: 2em;
+    height: calc(100% - 8em);
+    border-radius: 5px;
+}
+
+.vote-panel {
+    background-color: var(--primary-variant);
+}
+
+.side-panel {
+    background-color: var(--variant2);
+}
+
+.home-icon {
+    font-size: 15em !important;
+    fill: #757575 !important;
+}
+
+.home-icon + h6 {
+    color: #505050 !important;;
+}
+
+.edit-vote-button {
+    background-color: var(--secondary) !important;
+}
+
+.voted-candidate-image {
+    max-height: 50%;
+    border-radius: 0.4em;
+}
+
+.chart-selector {
+    background-color: transparent !important;
+    border-radius: 1em;
+    border: solid thick var(--secondary);
+}
+
+.chart-icon.Mui-selected {
+    color: var(--primary-variant) !important;
+}
+
+.chart {
+    max-height: 65vh !important;
+}

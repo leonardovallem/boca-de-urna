@@ -1,0 +1,17 @@
+.candidate-card {
+    border-radius: 0.8em;
+    padding: 1em;
+    margin-bottom: 0.8em;
+    background-color: white;
+}
+
+.candidate-image {
+    max-height: 8em;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.4em;
+    margin-right: 1em;
+}
+
+.party-logo {
+    max-height: 4em;
+}

@@ -1,0 +1,13 @@
+.party-number {
+    border-radius: 50%;
+    font-size: 1em;
+
+    padding: 0.6em;
+    width: 1em;
+    height: 1em;
+    font-weight: 700;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

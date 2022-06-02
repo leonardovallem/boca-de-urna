@@ -1,0 +1,52 @@
+.login-body {
+    overflow: hidden;
+}
+
+.login-container {
+    background-color: var(--primary);
+    color: white;
+    border-top-left-radius: 1em;
+    border-bottom-left-radius: 1em;
+}
+
+.login-input-fields {
+    width: 60%;
+    margin: 3em auto;
+}
+
+.login-input-fields label {
+    color: white;
+}
+
+.submit-button {
+    background-color: var(--secondary) !important;
+}
+
+.alternate-button {
+    border-color: var(--primary-variant) !important;
+    color: var(--primary-variant) !important;
+}
+
+.login-divider {
+    margin: 2em 0 !important;
+    width: 90%;
+    align-items: start !important;
+}
+
+.login-divider::before, .login-divider::after {
+    border-color: rgba(240, 240, 240, 0.5) !important;
+}
+
+.login-divider div {
+    background-color: rgba(100, 100, 100, 0.7) !important;
+    color: white !important;
+}
+
+#login-info img {
+    border-radius: 1em;
+    margin: 3em 6em;
+}
+
+#login-info h5 {
+    margin-top: 2rem;
+}
