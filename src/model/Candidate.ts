@@ -1,4 +1,4 @@
-import {Vote} from "./Vote"
+import {parse, Vote} from "./Vote"
 import Party from "./Party"
 
 export default class Candidate {
@@ -21,14 +21,16 @@ export default class Candidate {
 
     isValid = () => this.vote !== Vote.OUTRO && this.vote !== Vote.NONE && this.vote !== Vote.NULO
 
-    static fromVote(vote: Vote): Candidate {
+    static fromVote(vote: Vote | string): Candidate {
         let name = "Nulo", code: number | null = null, picture: string | null = null
         let party: Party | null = null
 
-        switch (vote) {
+        const parsedVote = typeof vote === "string" ? parse(vote) : vote
+
+        switch (parsedVote) {
         case Vote.LULA:
             name = "Luís Inácio Lula da Silva"
-            code = vote
+            code = parsedVote
             picture = "https://www.cartacapital.com.br/wp-content/uploads/2022/05/lula-time.png"
             party = new Party("Partido dos Trabalhadores",
                 "PT",
@@ -40,7 +42,7 @@ export default class Candidate {
             break
         case Vote.BOLSONARO:
             name = "Jair Messias Bolsonaro"
-            code = vote
+            code = parsedVote
             picture = "https://cdn.crusoe.com.br/uploads/2021/01/Reproducao-Redes-Sociais-e1610083447831.jpg"
             party = new Party("Partido Liberal",
                 "PL",
@@ -52,7 +54,7 @@ export default class Candidate {
             break
         case Vote.CIRO:
             name = "Ciro Gomes"
-            code = vote
+            code = parsedVote
             picture = "https://www.cartacapital.com.br/wp-content/uploads/2021/11/Sem-T%C3%ADtulo-26.jpg"
             party = new Party("Partido Democrático Trabalhista",
                 "PDT",
@@ -64,7 +66,7 @@ export default class Candidate {
             break
         case Vote.SIMONE_TEBET:
             name = "Simone Tebet"
-            code = vote
+            code = parsedVote
             picture = "https://cdn.jornaldebrasilia.com.br/wp-content/uploads/2019/09/Simone-Tebet.jpeg"
             party = new Party("Movimento Democrático Brasileiro",
                 "MDB",
@@ -88,7 +90,7 @@ export default class Candidate {
             break
         }
 
-        return new Candidate(name, picture, vote, party)
+        return new Candidate(name, picture, parsedVote, party)
     }
 }
 

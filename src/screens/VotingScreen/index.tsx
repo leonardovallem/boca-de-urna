@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import {BottomNavigation, BottomNavigationAction, Button, Grid, Stack, Typography} from "@mui/material"
 import HowToVoteIcon from "@mui/icons-material/HowToVote"
 import PieChartIcon from "@mui/icons-material/PieChart"
@@ -9,22 +9,50 @@ import TopAppBar from "../../components/TopAppBar"
 import "./style.css"
 import Candidate, {Bolsonaro, Ciro, Lula, Nenhum, Nulo, Outro, SimoneTebet} from "../../model/Candidate"
 import CandidateSelector from "../../components/CandidateSelector"
+import isAuthenticated from "../../util/AuthenticationUtil"
+import {Navigate} from "react-router"
+import VotingApi from "../../api/VotingApi"
+import VotingData from "../../model/VotingData"
+import {Vote} from "../../model/Vote"
 
 export default function VotingScreen() {
     enum ChartType { Bar, Pie }
 
+    const [authenticated] = useState(isAuthenticated())
+
     const [candidate, setCandidate] = useState<Candidate>(Nenhum)
+    const [votingData, setVotingData] = useState(new VotingData())
     const [isVoting, setVoting] = useState(false)
     const [selectedChart, setSelectedChart] = useState(ChartType.Pie)
 
-    const hasVoted = () => candidate !== null
+    const hasVoted = () => candidate.vote !== Vote.NONE
 
     const getVoteState = () => hasVoted() ? "Editar" : "Votar"
 
     function handleVote(candidate: Candidate) {
-        setCandidate(candidate)
         setVoting(false)
+        VotingApi.vote(candidate.vote)
+            .then(() => window.location.reload())
+            .catch(err => console.log(err))
     }
+
+    function updateVote() {
+        const cpf = localStorage.getItem("user")!
+        VotingApi.getUserVote(cpf)
+            .then(vote => {
+                console.log(vote)
+                setCandidate(Candidate.fromVote(vote.data))
+            })
+    }
+
+    function updateVotingData() {
+        VotingApi.retrieveData()
+            .then(data => setVotingData(data.data))
+    }
+
+    useEffect(updateVote, [])
+
+    useEffect(updateVotingData, [candidate])
 
     Chart.register(
         CategoryScale,
@@ -53,12 +81,21 @@ export default function VotingScreen() {
         }
     }
 
+    const getVotingData = () => [
+        votingData.lula,
+        votingData.bolsonaro,
+        votingData.ciro,
+        votingData.simoneTebet,
+        votingData.others,
+        votingData.nullVotes,
+    ].map(data => Math.max(data, 0))
+
     const data = {
         labels: ["Lula", "Bolsonaro", "Ciro", "Simone Tebet", "Outro", "Nulo"],
         datasets: [
             {
                 label: "Candidato",
-                data: [51, 27, 7, 2, 4, 8],
+                data: getVotingData(),
                 backgroundColor: [
                     Lula.party!.primaryColor,
                     Bolsonaro.party!.primaryColor,
@@ -79,7 +116,7 @@ export default function VotingScreen() {
         ]
     }
 
-    return <Stack height="100vh">
+    return authenticated ? <Stack height="100vh">
         <TopAppBar/>
         <Grid container flexGrow={1} className="home-container">
             <Grid item xs={isVoting ? 12 : 6} className="vote-panel-wrapper">
@@ -104,7 +141,8 @@ export default function VotingScreen() {
                             : <>
                                 <Typography variant="h3">{candidate.name}</Typography>
 
-                                {candidate.isValid() && <img className="voted-candidate-image" src={candidate.picture ?? ""}/>}
+                                {candidate.isValid() &&
+                                    <img className="voted-candidate-image" src={candidate.picture ?? ""}/>}
                                 {
                                     hasVoted() || <Stack spacing={3} justifyContent="center" alignItems="center" flex={1}>
                                         <HowToVoteIcon className="home-icon"/>
@@ -143,5 +181,5 @@ export default function VotingScreen() {
                 </Grid>
             }
         </Grid>
-    </Stack>
+    </Stack> : <Navigate to="/login"/>
 }

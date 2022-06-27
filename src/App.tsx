@@ -1,11 +1,10 @@
 import React from "react"
 import "./App.css"
-import LoginPage from "./screens/LoginPage"
-import VotingScreen from "./screens/VotingScreen"
+import Routes from "./routes"
 
 function App() {
     return <div style={{ height: "100vh" }}>
-        <VotingScreen />
+        <Routes />
     </div>
 }
 
